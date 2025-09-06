@@ -1,9 +1,10 @@
 package main
 
-func main() {
-	//TODO- get JSON from URL
-	//PARSE the JSON in a struct
-	type jobStruct []struct {
+import "net/http"
+
+
+URL := "https://raw.githubusercontent.com/SimplifyJobs/New-Grad-Positions/refs/heads/dev/.github/scripts/listings.json"
+type jobStruct []struct {
 		Source      string   `json:"source"`
 		CompanyName string   `json:"company_name"`
 		ID          string   `json:"id"`
@@ -20,4 +21,10 @@ func main() {
 		Degrees     []any    `json:"degrees,omitempty"`
 	}
 
+func main() {
+	//TODO- get JSON from URL
+	//PARSE the JSON in a struct
+
+
+		 
 }
