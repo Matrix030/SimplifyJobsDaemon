@@ -11,4 +11,6 @@ TODOs:
 - [ ] ?Cache
 - [ ] ?Local GPT-OSS review and Parsing the URL I get from the JSON
 - [ ] ?BYOK GPT for editing process in the resume
+- [ ] ?swaync for direct desktop notifications
+- [ ] ?exec-once in hyprland.conf
 
