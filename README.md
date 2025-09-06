@@ -3,6 +3,7 @@
 TODOs:
 - [ ] Struct for JSON
 - [ ] internal/client
+- [ ] Config File
 - [ ] Sponsorship Checker
 - [ ] Timeouts (10 - 20 minutes)
 - [ ] Divide Internships and Full Time Opps
