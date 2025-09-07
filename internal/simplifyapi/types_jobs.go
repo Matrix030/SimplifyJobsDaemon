@@ -1,6 +1,6 @@
 package simplifyapi
 
-type jobStruct []struct {
+type JobStruct struct {
 	Source      string   `json:"source"`
 	CompanyName string   `json:"company_name"`
 	ID          string   `json:"id"`
@@ -16,3 +16,5 @@ type jobStruct []struct {
 	Category    string   `json:"category,omitempty"`
 	Degrees     []any    `json:"degrees,omitempty"`
 }
+
+type Jobs []JobStruct
