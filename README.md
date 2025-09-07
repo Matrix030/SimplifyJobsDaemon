@@ -1,7 +1,7 @@
 # simplify_jobs_cli
 
 TODOs:
-- [ ] Struct for JSON
+- [x] Struct for JSON
 - [ ] internal/client
 - [ ] Config File
 - [ ] Sponsorship Checker
