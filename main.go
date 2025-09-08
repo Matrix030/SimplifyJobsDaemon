@@ -6,6 +6,7 @@ import (
 	"time"
 )
 
+// util function to be taken to the internal/utils
 func GetUniqueSponsorshipValues(jobs api.Jobs) []string {
 	unique := make(map[string]bool)
 	for _, job := range jobs {
@@ -31,11 +32,11 @@ func main() {
 		return
 	}
 
+	//utils part of the program
 	unique := GetUniqueSponsorshipValues(jobs)
 	for _, value := range unique {
 		fmt.Println("Unique Sponsorship values:", value)
 
 	}
 	// startClient(cfg)
-
 }
