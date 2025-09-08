@@ -3,9 +3,9 @@
 TODOs:
 - [x] Struct for JSON
 - [x] internal/client
-- [ ] Config File
+- [x] Config File
 - [ ] Sponsorship Checker
-- [ ] Timeouts (10 - 20 minutes)
+- [x] Timeouts (10 - 20 minutes)
 - [ ] Divide Internships and Full Time Opps
 - [ ] ?Simple Commands
 - [ ] ?Cache
