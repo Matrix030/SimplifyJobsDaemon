@@ -31,8 +31,9 @@ func startClient(cfg *config) {
 		}
 
 		oldJobs = newJobs
-
-		//comparison logic goes here
+		//TODO: comparison logic goes here
+		compareJobs(oldJobs, newJobs)
+		//TODO: sendNotification(newJobSlice)
 	}
 
 }
