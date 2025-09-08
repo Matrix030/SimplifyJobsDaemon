@@ -2,7 +2,7 @@
 
 TODOs:
 - [x] Struct for JSON
-- [ ] internal/client
+- [x] internal/client
 - [ ] Config File
 - [ ] Sponsorship Checker
 - [ ] Timeouts (10 - 20 minutes)
