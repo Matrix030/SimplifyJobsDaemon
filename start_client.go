@@ -3,8 +3,7 @@ package main
 import (
 	"fmt"
 	api "github.com/Matrix030/simplify_jobs_cli/internal/simplifyapi"
-	time_format "github.com/Matrix030/simplify_jobs_cli/internal/simplifyutils"
-	"reflect"
+	"time"
 )
 
 type config struct {
@@ -13,24 +12,23 @@ type config struct {
 
 func startClient(cfg *config) {
 
-	var jobs api.Jobs
+	ticker := time.NewTicker(30 * time.Minute)
+	defer ticker.Stop()
+
+	//running once on startup
+	fetchAndProcessJobs(cfg)
+	for {
+		select {
+		case <-ticker.C:
+			fetchAndProcessJobs(cfg)
+		}
+	}
+}
+
+func fetchAndProcessJobs(cfg *config) {
 	jobs, err := cfg.jobClient.GetJobData()
 	if err != nil {
-		fmt.Printf("There was an error %v\n", err)
-
+		fmt.Println("There was an error %v\n", err)
+		return
 	}
-
-	v := reflect.ValueOf(jobs[len(jobs)-1])
-	t := reflect.TypeOf(jobs[len(jobs)-1])
-
-	for i := 0; i < v.NumField(); i++ {
-		fieldName := t.Field(i).Name
-		fieldValue := v.Field(i).Interface()
-		if fieldName == "DateUpdated" || fieldName == "DatePosted" {
-			num := int64(fieldValue.(int))
-			fieldValue = time_format.FormatUnixTime(num)
-		}
-		fmt.Printf("%s: %v\n", fieldName, fieldValue)
-	}
-
 }
