@@ -2,8 +2,8 @@ package main
 
 import (
 	"fmt"
-	time_format "github.com/Matrix030/simplify_jobs_cli/internal"
 	api "github.com/Matrix030/simplify_jobs_cli/internal/simplifyapi"
+	time_format "github.com/Matrix030/simplify_jobs_cli/internal/simplifyutils"
 	"reflect"
 )
 
