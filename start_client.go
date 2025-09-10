@@ -11,12 +11,20 @@ type config struct {
 }
 
 func startClient(cfg *config) {
+	var oldJobs api.Jobs
 	ticker := time.NewTicker(30 * time.Minute)
 	defer ticker.Stop()
 
 	//running once on startup
+	//TODO: put the data in a file after every fetch and check the if the file is present before fetching so that I could just assign oldJobs value to the data present in the file
+	condition, oldJobsData, err := jsonFileChecker()
+	if condition {
+		// file with data found
+		oldJobs = oldJobsData
+	} else {
+		oldJobs, err = fetchAndProcessJobs(cfg)
+	}
 
-	oldJobs, err := fetchAndProcessJobs(cfg)
 	if err != nil {
 		fmt.Printf("An error occurred while fetch the job %v\n", err)
 		return
@@ -31,9 +39,10 @@ func startClient(cfg *config) {
 		}
 
 		oldJobs = newJobs
-		//TODO: comparison logic goes here
-		compareJobs(oldJobs, newJobs)
-		//TODO: sendNotification(newJobSlice)
+
+		newJobSlice := compareJobs(oldJobs, newJobs)
+		//TODO:
+		sendNotification(newJobSlice)
 	}
 
 }
