@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	api "github.com/Matrix030/simplify_jobs_cli/internal/simplifyapi"
+	utils "github.com/Matrix030/simplify_jobs_cli/internal/simplifyutils"
 	"time"
 )
 
@@ -16,18 +17,17 @@ func startClient(cfg *config) {
 	defer ticker.Stop()
 
 	//running once on startup
-	//TODO: put the data in a file after every fetch and check the if the file is present before fetching so that I could just assign oldJobs value to the data present in the file
-	condition, oldJobsData, err := jsonFileChecker()
-	if condition {
-		// file with data found
-		oldJobs = oldJobsData
-	} else {
-		oldJobs, err = fetchAndProcessJobs(cfg)
-	}
-
+	oldJobsData, err := utils.LoadExistingJobs()
 	if err != nil {
-		fmt.Printf("An error occurred while fetch the job %v\n", err)
-		return
+		// file with data not found
+		oldJobs, err := fetchAndProcessJobs(cfg)
+		//write the jobs you just got to the file
+		utils.JsonFileWriter(oldJobs)
+		if err != nil {
+			fmt.Printf("An error occurred while fetching the jobs %v\n", err)
+		}
+	} else {
+		oldJobs = oldJobsData
 	}
 
 	for {
