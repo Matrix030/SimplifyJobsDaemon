@@ -5,12 +5,16 @@ import (
 )
 
 func compareJobs(oldJobs, newJobs api.Jobs) api.Jobs {
-	var newJobsOnly api.Jobs
-	for len(oldJobs) > 0 && len(newJobs) > 0 && oldJobs[len(oldJobs)-1].ID != newJobs[len(newJobs)-1].ID {
-		poppedJob := newJobs[len(newJobs)-1]
-		newJobs = newJobs[:len(newJobs)-1]
+	oldJobMap := make(map[string]bool)
+	for _, job := range oldJobs {
+		oldJobMap[job.ID] = true
+	}
 
-		newJobsOnly = append(newJobsOnly, poppedJob)
+	var newJobsOnly api.Jobs
+	for _, job := range newJobs {
+		if job.Active && !oldJobMap[job.ID] {
+			newJobsOnly = append(newJobsOnly, job)
+		}
 	}
 	return newJobsOnly
 }

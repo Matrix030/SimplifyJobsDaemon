@@ -19,13 +19,15 @@ func startClient(cfg *config) {
 	//running once on startup
 	oldJobsData, err := utils.LoadExistingJobs()
 	if err != nil {
-		// file with data not found
-		oldJobs, err := fetchAndProcessJobs(cfg)
-		//write the jobs you just got to the file
-		utils.JsonFileWriter(oldJobs)
+		fmt.Printf("File not found: %v\n", err)
+		// Fetch new jobs since file doesn't exist
+		oldJobs, err = fetchAndProcessJobs(cfg)
 		if err != nil {
 			fmt.Printf("An error occurred while fetching the jobs %v\n", err)
+			return // or handle error appropriately
 		}
+		// Only write if fetch succeeded
+		utils.JsonFileWriter(oldJobs)
 	} else {
 		oldJobs = oldJobsData
 	}
@@ -42,9 +44,8 @@ func startClient(cfg *config) {
 
 		newJobSlice := compareJobs(oldJobs, newJobs)
 		//TODO:
-		sendNotification(newJobSlice)
+		utils.SendNotification(newJobSlice)
 	}
-
 }
 
 func fetchAndProcessJobs(cfg *config) (api.Jobs, error) {
