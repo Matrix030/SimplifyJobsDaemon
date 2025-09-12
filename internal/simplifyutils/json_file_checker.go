@@ -9,6 +9,7 @@ import (
 )
 
 var fileName = "jobs.json"
+var newJobsFileName = "newJobsOnly.json"
 
 func JsonFileWriter(jobsData api.Jobs) error {
 	jsonData, err := json.MarshalIndent(jobsData, "", " ")
@@ -26,7 +27,42 @@ func JsonFileWriter(jobsData api.Jobs) error {
 	fmt.Println("Successfully wrote the jobs to the jobs.json")
 
 	return nil
+}
 
+// WriteNewJobsOnly writes only the new jobs to a separate file
+// This file gets rewritten (not appended) each time new jobs are found
+func WriteNewJobsOnly(newJobs api.Jobs) error {
+	if len(newJobs) == 0 {
+		// If no new jobs, write an empty array to the file
+		emptyJobs := api.Jobs{}
+		jsonData, err := json.MarshalIndent(emptyJobs, "", " ")
+		if err != nil {
+			return fmt.Errorf("error marshalling empty jobs data: %w", err)
+		}
+
+		err = os.WriteFile(newJobsFileName, jsonData, 0644)
+		if err != nil {
+			return fmt.Errorf("error writing empty new jobs file: %w", err)
+		}
+
+		fmt.Println("No new jobs found - cleared newJobsOnly.json")
+		return nil
+	}
+
+	// Marshal the new jobs to JSON with proper indentation
+	jsonData, err := json.MarshalIndent(newJobs, "", " ")
+	if err != nil {
+		return fmt.Errorf("error marshalling new jobs data: %w", err)
+	}
+
+	// Write to file (this overwrites the existing file)
+	err = os.WriteFile(newJobsFileName, jsonData, 0644)
+	if err != nil {
+		return fmt.Errorf("error writing new jobs file: %w", err)
+	}
+
+	fmt.Printf("Successfully wrote %d new jobs to %s\n", len(newJobs), newJobsFileName)
+	return nil
 }
 
 func LoadExistingJobs() (api.Jobs, error) {
@@ -47,3 +83,4 @@ func LoadExistingJobs() (api.Jobs, error) {
 
 	return *fileData, nil
 }
+
