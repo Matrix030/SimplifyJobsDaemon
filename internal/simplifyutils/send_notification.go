@@ -4,27 +4,42 @@ import (
 	"fmt"
 	api "github.com/Matrix030/simplify_jobs_cli/internal/simplifyapi"
 	"os/exec"
+	"strings"
 )
 
 func SendNotification(jobSlice api.Jobs) error {
-
 	if len(jobSlice) == 0 {
 		return nil
 	}
-	if len(jobSlice) > 3 {
-		numJobs := fmt.Sprintf("%v New Job Notification", len(jobSlice))
-		cmd := exec.Command("notify-send", "New Job Notifications", numJobs)
-		err := cmd.Run()
-		if err != nil {
-			return fmt.Errorf("An Error occurred while sending the a notification: %v\n", err)
+
+	var title, body string
+
+	if len(jobSlice) == 1 {
+		// Single job notification - show company and title
+		job := jobSlice[0]
+		title = "New Job Available!"
+		body = fmt.Sprintf("%s - %s", job.CompanyName, job.Title)
+	} else if len(jobSlice) <= 3 {
+		// Few jobs - show count and list companies
+		title = fmt.Sprintf("%d New Jobs Available!", len(jobSlice))
+		var companies []string
+		for _, job := range jobSlice {
+			companies = append(companies, job.CompanyName)
 		}
-		return nil
+		body = strings.Join(companies, ", ")
+	} else {
+		// Many jobs - just show count
+		title = fmt.Sprintf("%d New Jobs Available!", len(jobSlice))
+		body = "Check your terminal for details"
 	}
 
-	cmd := exec.Command("notify-send", "New Job Notification", jobSlice[0].CompanyName)
+	// Use notify-send command (Linux desktop notification)
+	cmd := exec.Command("notify-send", title, body)
 	err := cmd.Run()
 	if err != nil {
-		return fmt.Errorf("An Error occurred while sending a notification: %v \n", err)
+		return fmt.Errorf("failed to send notification: %w", err)
 	}
+
 	return nil
 }
+
