@@ -5,19 +5,25 @@ import (
 )
 
 func compareJobs(oldJobs, newJobs api.Jobs) api.Jobs {
-	// Create a map to store the latest date (posted or updated) for each job ID from old jobs
-	oldJobDates := make(map[string]int)
+	// Create a set of old job IDs for fast lookup
+	oldJobIDs := make(map[string]bool)
 	for _, job := range oldJobs {
-		// Use the more recent date between posted and updated
-		latestDate := job.DatePosted
-		if job.DateUpdated > latestDate {
-			latestDate = job.DateUpdated
-		}
-		oldJobDates[job.ID] = latestDate
+		oldJobIDs[job.ID] = true
 	}
 
 	var newJobsOnly api.Jobs
-	for _, job := range newJobs {
+
+	// Start from the end (newest jobs) and work backwards
+	// Stop when we find a job that exists in the old jobs
+	for i := len(newJobs) - 1; i >= 0; i-- {
+		job := newJobs[i]
+
+		// If we find a job that already exists in old jobs,
+		// we can stop because all jobs before this one should also exist
+		if oldJobIDs[job.ID] {
+			break
+		}
+
 		// Only consider active jobs
 		if !job.Active {
 			continue
@@ -28,23 +34,9 @@ func compareJobs(oldJobs, newJobs api.Jobs) api.Jobs {
 			continue
 		}
 
-		// Get the latest date for this new job
-		newJobLatestDate := job.DatePosted
-		if job.DateUpdated > newJobLatestDate {
-			newJobLatestDate = job.DateUpdated
-		}
-
-		// Check if this job is new or has been updated
-		oldDate, exists := oldJobDates[job.ID]
-
-		if !exists {
-			// This is a completely new job (ID not in old jobs)
-			newJobsOnly = append(newJobsOnly, job)
-		} else if newJobLatestDate > oldDate {
-			// This job exists but has been updated since last check
-			newJobsOnly = append(newJobsOnly, job)
-		}
-		// If newJobLatestDate <= oldDate, the job hasn't been updated, so skip it
+		// This is a new job that passes our filters
+		// Prepend to maintain chronological order (oldest new job first)
+		newJobsOnly = append(api.Jobs{job}, newJobsOnly...)
 	}
 
 	return newJobsOnly
