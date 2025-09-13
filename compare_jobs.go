@@ -1,7 +1,7 @@
 package main
 
 import (
-	api "github.com/Matrix030/simplify_jobs_cli/internal/simplifyapi"
+	api "github.com/Matrix030/SimplifyJobsDaemon/internal/simplifyapi"
 )
 
 func compareJobs(oldJobs, newJobs api.Jobs) api.Jobs {

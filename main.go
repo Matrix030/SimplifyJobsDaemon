@@ -7,7 +7,7 @@ import (
 	"syscall"
 	"time"
 
-	api "github.com/Matrix030/simplify_jobs_cli/internal/simplifyapi"
+	api "github.com/Matrix030/SimplifyJobsDaemon/internal/simplifyapi"
 )
 
 func main() {

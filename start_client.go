@@ -2,8 +2,8 @@ package main
 
 import (
 	"fmt"
-	api "github.com/Matrix030/simplify_jobs_cli/internal/simplifyapi"
-	utils "github.com/Matrix030/simplify_jobs_cli/internal/simplifyutils"
+	api "github.com/Matrix030/SimplifyJobsDaemon/internal/simplifyapi"
+	utils "github.com/Matrix030/SimplifyJobsDaemon/internal/simplifyutils"
 	"time"
 )
 

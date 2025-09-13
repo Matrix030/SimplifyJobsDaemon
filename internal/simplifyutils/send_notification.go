@@ -2,7 +2,7 @@ package simplifyutils
 
 import (
 	"fmt"
-	api "github.com/Matrix030/simplify_jobs_cli/internal/simplifyapi"
+	api "github.com/Matrix030/SimplifyJobsDaemon/internal/simplifyapi"
 	"os/exec"
 	"strings"
 )
@@ -34,7 +34,7 @@ func SendNotification(jobSlice api.Jobs) error {
 	}
 
 	// Use notify-send command (Linux desktop notification)
-	cmd := exec.Command("notify-send", title, body)
+	cmd := exec.Command("notify-send", "-u", "critical", title, body)
 	err := cmd.Run()
 	if err != nil {
 		return fmt.Errorf("failed to send notification: %w", err)
@@ -42,4 +42,3 @@ func SendNotification(jobSlice api.Jobs) error {
 
 	return nil
 }
-

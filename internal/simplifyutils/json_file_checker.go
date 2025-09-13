@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"os"
 
-	api "github.com/Matrix030/simplify_jobs_cli/internal/simplifyapi"
+	api "github.com/Matrix030/SimplifyJobsDaemon/internal/simplifyapi"
 )
 
 var fileName = "jobs.json"
@@ -83,4 +83,3 @@ func LoadExistingJobs() (api.Jobs, error) {
 
 	return *fileData, nil
 }
-
