@@ -33,38 +33,50 @@ func JsonFileWriter(jobsData api.Jobs) error {
 // This file gets rewritten (not appended) each time new jobs are found
 func WriteNewJobsOnly(newJobs api.Jobs) error {
 	if len(newJobs) == 0 {
-		// If no new jobs, write an empty array to the file
-		emptyJobs := api.Jobs{}
-		jsonData, err := json.MarshalIndent(emptyJobs, "", " ")
-		if err != nil {
-			return fmt.Errorf("error marshalling empty jobs data: %w", err)
-		}
-
-		err = os.WriteFile(newJobsFileName, jsonData, 0644)
-		if err != nil {
-			return fmt.Errorf("error writing empty new jobs file: %w", err)
-		}
-
-		fmt.Println("No new jobs found - cleared newJobsOnly.json")
+		// If no new jobs, don't modify the file
+		fmt.Println("No new jobs found - keeping existing newJobsOnly.json unchanged")
 		return nil
 	}
 
-	// Marshal the new jobs to JSON with proper indentation
-	jsonData, err := json.MarshalIndent(newJobs, "", " ")
+	var existingJobs api.Jobs
+
+	// Try to read existing jobs from the file
+	if _, err := os.Stat(newJobsFileName); err == nil {
+		// File exists, read it
+		existingData, err := os.ReadFile(newJobsFileName)
+		if err != nil {
+			return fmt.Errorf("error reading existing new jobs file: %w", err)
+		}
+
+		// Only try to unmarshal if file is not empty
+		if len(existingData) > 0 {
+			err = json.Unmarshal(existingData, &existingJobs)
+			if err != nil {
+				return fmt.Errorf("error unmarshalling existing jobs data: %w", err)
+			}
+		}
+	}
+	// If file doesn't exist or is empty, existingJobs remains empty slice
+
+	// Prepend new jobs to existing jobs (new jobs at the top)
+	combinedJobs := append(newJobs, existingJobs...)
+
+	// Marshal the combined jobs to JSON with proper indentation
+	jsonData, err := json.MarshalIndent(combinedJobs, "", " ")
 	if err != nil {
-		return fmt.Errorf("error marshalling new jobs data: %w", err)
+		return fmt.Errorf("error marshalling combined jobs data: %w", err)
 	}
 
-	// Write to file (this overwrites the existing file)
+	// Write to file (this overwrites with the combined data)
 	err = os.WriteFile(newJobsFileName, jsonData, 0644)
 	if err != nil {
-		return fmt.Errorf("error writing new jobs file: %w", err)
+		return fmt.Errorf("error writing combined jobs file: %w", err)
 	}
 
-	fmt.Printf("Successfully wrote %d new jobs to %s\n", len(newJobs), newJobsFileName)
+	fmt.Printf("Successfully prepended %d new jobs to %s (total: %d jobs)\n",
+		len(newJobs), newJobsFileName, len(combinedJobs))
 	return nil
 }
-
 func LoadExistingJobs() (api.Jobs, error) {
 	fileData := &api.Jobs{}
 	if _, err := os.Stat(fileName); os.IsNotExist(err) {
