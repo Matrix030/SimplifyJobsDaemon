@@ -37,7 +37,7 @@ func main() {
 	// Wait for either the client to finish or a shutdown signal
 	select {
 	case <-sigChan:
-		fmt.Println("\n🛑 Shutdown signal received. Stopping job monitor...")
+		fmt.Println("\nShutdown signal received. Stopping job monitor...")
 		fmt.Println("Thank you for using SimplifyJobs CLI!")
 	case <-done:
 		fmt.Println("Job monitor stopped.")

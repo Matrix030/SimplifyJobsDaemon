@@ -13,7 +13,7 @@ type config struct {
 
 func startClient(cfg *config) {
 	var oldJobs api.Jobs
-	ticker := time.NewTicker(30 * time.Minute)
+	ticker := time.NewTicker(30 * time.Minute) //Interval
 	defer ticker.Stop()
 
 	// Running once on startup
