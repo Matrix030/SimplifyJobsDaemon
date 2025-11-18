@@ -22,7 +22,6 @@ func main() {
 		jobClient: simplifyClient,
 	}
 
-	// Set up graceful shutdown handling
 	// This catches Ctrl+C (SIGINT) and SIGTERM signals
 	sigChan := make(chan os.Signal, 1)
 	signal.Notify(sigChan, syscall.SIGINT, syscall.SIGTERM)
