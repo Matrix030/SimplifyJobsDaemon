@@ -6,11 +6,11 @@ TODOs:
 - [x] Config File
 - [x] Sponsorship Checker
 - [x] Timeouts (10 - 20 minutes)
-- [ ] Divide Internships and Full Time Opps
+- [X] Divide Internships and Full Time Opps
 - [ ] ?Simple Commands
-- [ ] ?Cache
+- [X] Cache
 - [ ] ?Local GPT-OSS review and Parsing the URL I get from the JSON
 - [ ] ?BYOK GPT for editing process in the resume
-- [x] ?swaync for direct desktop notifications
-- [ ] ?exec-once in hyprland.conf
+- [X] swaync for direct desktop notifications
+- [X] exec-once in hyprland.conf
 
