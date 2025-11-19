@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"log"
 	"net/http"
+	"strings"
 	"time"
 
 	"github.com/PuerkitoBio/goquery"
@@ -21,14 +22,13 @@ func NewScraper(timeout time.Duration) *Scraper {
 	}
 }
 
-
 func (s *Scraper) ScrapeJobDescription(url, jobID, companyName, title string) JobDescription {
 	result := JobDescription{
-		jobID: jobID,
+		jobID:       jobID,
 		CompanyName: companyName,
-		Title: title,
-		URL: url,
-		ScrapedAt: time.Now().Unix(),
+		Title:       title,
+		URL:         url,
+		ScrapedAt:   time.Now().Unix(),
 	}
 
 	resp, err := s.httpClient.Get(url)
@@ -68,7 +68,7 @@ func (s *Scraper) extractdescription(doc *goquery.Document) string {
 	if desc := doc.Find("meta[property='og:description']").AttrOr("content", ""); desc != "" {
 		return desc
 	}
-	
+
 	//strategy two
 	if desc := doc.Find("meta[name='description']").AttrOr("content", ""); desc != "" {
 		return desc
@@ -83,5 +83,18 @@ func (s *Scraper) extractdescription(doc *goquery.Document) string {
 		"main",
 	}
 
-	for _,
+	for _, selector := range selectors {
+		if text := doc.Find(selector).First().Text(); text != "" {
+			return text
+		}
+	}
+
+	return ""
+}
+
+func cleanText(text string) string {
+	text = strings.TrimSpace(text)
+
+	lines := strings.Fields(text)
+	return strings.Join(lines, " ")
 }
