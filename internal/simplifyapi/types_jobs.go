@@ -15,6 +15,7 @@ type JobStruct struct {
 	Sponsorship string   `json:"sponsorship"`
 	Category    string   `json:"category,omitempty"`
 	Degrees     []any    `json:"degrees,omitempty"`
+	Description string   `json:"description,omitempty"`
 }
 
 type Jobs []JobStruct
