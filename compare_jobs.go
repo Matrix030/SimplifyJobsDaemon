@@ -39,5 +39,30 @@ func compareJobs(oldJobs, newJobs api.Jobs) api.Jobs {
 
 // New Scrape descriptions for new jobs
 func scrapeNewJobDescriptions(jobs api.Jobs) []scraper.JobDescription {
+	s := scraper.NewScraper(10 * time.Second)
+	var descriptions []scraper.JobDescription
 
+	for _, job := range jobs {
+		fmt.Printf("Scraping: %s - %s \n", job.CompanyName, job.Title)
+
+		desc := s.ScrapeJobDescription(job.URL, job.ID, job.CompanyName, job.Title)
+		descriptions = append(descriptions, desc)
+
+		time.Sleep(2 * time.Second)
+	}
+
+	return descriptions
+}
+
+func isEligibleSponsorship(sponsorship string) bool {
+	switch sponsorship {
+	case "Other", "Offers Sponsorship":
+		return true
+
+	case "U.S. Citizenship is Required", "Does Not Offer Sponsorship":
+		return false
+
+	default:
+		return true
+	}
 }
