@@ -62,6 +62,14 @@ func startClient(cfg *config) {
 		if len(newJobSlice) > 0 {
 			fmt.Printf("Found %d new jobs!\n", len(newJobSlice))
 
+			fmt.Println("Scraping job Descriptions....")
+			descriptions := scrapeNewJobDescriptions(newJobSlice)
+
+			err = utils.SaveJobDescriptions(descriptions)
+			if err != nil {
+				fmt.Printf("Error saving descriptions: %v\n", err)
+			}
+
 			// Send notification for new jobs
 			err = utils.SendNotification(newJobSlice)
 			if err != nil {

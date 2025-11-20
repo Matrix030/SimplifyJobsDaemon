@@ -24,7 +24,7 @@ func NewScraper(timeout time.Duration) *Scraper {
 
 func (s *Scraper) ScrapeJobDescription(url, jobID, companyName, title string) JobDescription {
 	result := JobDescription{
-		jobID:       jobID,
+		JobID:       jobID,
 		CompanyName: companyName,
 		Title:       title,
 		URL:         url,
