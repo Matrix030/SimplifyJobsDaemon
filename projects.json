@@ -1,0 +1,14 @@
+[
+  {
+    "name": "SimplifyJobsDaemon",
+    "description": "Go daemon that monitors job postings from GitHub Simplify, compares new listings, implements intelligent caching, sends desktop notifications via swaync, and filters jobs by sponsorship eligibility. Built with concurrent programming and HTTP clients."
+  },
+  {
+    "name": "YourProject2",
+    "description": "Brief description of another project highlighting key technologies and achievements"
+  },
+  {
+    "name": "YourProject3",
+    "description": "Another project description"
+  }
+]
