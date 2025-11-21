@@ -77,27 +77,35 @@ def health_check():
     return jsonify({"status":"unhealthy", "ollama":"running"}), 503
 
 @app.route('/analyze', methods=['POST'])
-
-def analyze_job():
+def analyze_jobs():
     try:
-        data = AnalyzeRequest(**request.json)
+        #Validate request
+        req_data = request.get_json()
+        if not req_data:
+            return jsonify({"error": "No JSON body provided"}), 400
 
-        project_dict = [{"name": p.name, "description": p.description} for p in data.projects]
+        data = AnalyzeRequest(**req_data)
+        
+        #Convert pydantic models to dicts for prompt
+        projects_dict = [{"name": p.name, "description": p.description} for p in data.projects]
 
+        #Create prompt
         prompt = create_project_selection_prompt(
-            data.job_description,
-            project_dict
-        )
+                data.job_description,
+                projects_dict
+            )
 
+        #Query Ollama
         print(f"Querying Ollama with model: {MODEL_NAME}")
         llm_response = query_ollama(prompt)
         print(f"Raw LLM response: {llm_response}")
 
+        #Parse LLM response
         parsed = extract_json_from_response(llm_response)
 
+        result = AnalyzeResponse(**parsed)
 
-        result = AnalyzeRequest(**parsed)
-        return jsonify(result.dict()), 200
+        return jsonify(result.model_dump()), 200
     
     except ValidationError as e:
         return jsonify({"error": "Invalid request format", "details": str(e)}), 400
@@ -106,7 +114,9 @@ def analyze_job():
         return jsonify({"error": "Failed to parse LLM response as JSON", "details": str(e)}), 500
 
     except Exception as e:
+        print(f"Error: {e}")
         return jsonify({"error": str(e)}), 500
+
 
 if __name__ == "__main__":
     print(f"Starting LLM server with model: {MODEL_NAME}")

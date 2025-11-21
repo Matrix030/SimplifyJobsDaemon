@@ -14,7 +14,7 @@ type LLMClient struct {
 	httpClient *http.Client
 }
 
-func newLLMClient(baseURL string, timeout time.Duration) *LLMClient {
+func NewLLMClient(baseURL string, timeout time.Duration) *LLMClient {
 	return &LLMClient{
 		baseURL: baseURL,
 		httpClient: &http.Client{
