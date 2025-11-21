@@ -1,14 +1,55 @@
 [
-  {
-    "name": "SimplifyJobsDaemon",
-    "description": "Go daemon that monitors job postings from GitHub Simplify, compares new listings, implements intelligent caching, sends desktop notifications via swaync, and filters jobs by sponsorship eligibility. Built with concurrent programming and HTTP clients."
-  },
-  {
-    "name": "YourProject2",
-    "description": "Brief description of another project highlighting key technologies and achievements"
-  },
-  {
-    "name": "YourProject3",
-    "description": "Another project description"
-  }
+	{
+		"name": "SteamLensAI",
+		"description": "Technology Used: Dask, PyTorch, Hugging Face, MongoDB, Docker, AWS EC2.\n- Engineered a GPU-accelerated NLP pipeline to process 400k+ game reviews in 3 min for actionable insights\n- Replaced Kubernetes with Dask, cutting memory 40%, enabling <1s startup across eight workers on a single GPU\n- Deployed on AWS EC2, with 99% GPU use, stable throughput, and reducing hosting costs by 85%"
+	},
+	{
+		"name": "NYC Transit Hub",
+		"description": "Technology Used: TypeScript, RESTful API, Firebase.\n- Built a transit tracking app using MTA API & Mapbox, showing real-time subway status to 80+ users\n- Designed alert dashboard and live map, reducing transit lookup time by 70% vs. MTA tools"
+	},
+	{
+		"name": "CodeBase",
+		"description": "Technology Used: TypeScript, React JS, C++, MongoDB.\n- Developed a web-based code editor for compiling and executing code, reducing workflow time by 75%\n- Integrated AI-powered hint system that surfaces official documentation-based suggestions, reducing external lookup time by 50% while preserving code originality"
+	},
+	{
+		"name": "LocalPilotAI",
+		"description": "Technology Used: TypeScript, Python, Pydantic, Ollama.\n- Increased developer productivity 50% by building an offline AI code-autocomplete tool with a VS Code extension\n- Maintained 100% data privacy with a fully offline design, powered by qwen3-coder LLM from Ollama, served locally to ensure low-latency (sub 50 ms) inference"
+	},
+	{
+		"name": "Strace - System Call Tracing",
+		"description": "Technology Used: C, Linux (xv6 Kernel), GDB.\n- Developed a Linux syscall tracer to speed up debugging by 40% and expose bottlenecks in low-latency systems\n- Enabled selective tracing via -e, -f, -s flags to generate detailed logs across 100+ system calls\n- Implemented kernel memory buffer for multi-process trace history with configurable limits"
+	},
+	{
+		"name": "Personality Prediction for CV Analysis",
+		"description": "Technology Used: Python, NumPy, Pandas, NLP.\n- Built supervised ML model using OCEAN traits to predict CV personality with 93% accuracy\n- Applied NLP + OCEAN modeling to automate shortlisting and role fit analysis, cutting recruiter decision time 30%\n- Published ICRMIR 2023 paper on supervised NLP classifying personalities and sentiment analysis"
+	},
+	{
+		"name": "Student Course Recommendation",
+		"description": "Technology Used: Python, NumPy, Pandas, PostgreSQL.\n- Used K-means clustering to group students by performance, achieving 92.6% model accuracy and uncovering academic patterns\n- Recommended subjects to 600+ students/semester based on the patterns, improving target’s performance 25%"
+	},
+	{
+		"name": "QuantumhealthShield",
+		"description": "Technology Used: Python, AES-GCM, Kyber, Dilithium, OQS-Python.\n- Built a post-quantum encryption system using AES-GCM + Kyber for secure medical record storage with 85% stronger key exchange than RSA\n- Created Dilithium-based signing protocols, eliminating 95% of IoT data tampering and ensuring full authenticity"
+	},
+	{
+		"name": "HTTP Client",
+		"description": "Technology Used: Go.\n- Built HTTP client from scratch in Go with custom URL parsers, DNS handlers, and connection managers\n- Developed examples for HTTP methods, JSON marshaling, and error handling using Go’s net/http package\n- Built modular headers, queries, and HTTPS components, demonstrating REST API and networking skills"
+	},
+	{
+		"name": "Chirpy (Go Web Server)",
+		"description": "Technology Used: Go, PostgreSQL, SQLC, REST API.\n- Built HTTP client from scratch in Go with custom URL parsers, DNS handlers, and connection managers\n- Developed examples for HTTP methods, JSON marshaling, and error handling using Go’s net/http package\n- Implemented RESTful APIs with API-key protected webhooks, supporting decoupled client-side consumption"
+	},
+	{
+		"name": "Tubely",
+		"description": "Technology Used: Go, SQLite, AWS S3, CloudFront, Docker.\n- Built a decoupled HTTP server in Go with secure auth, role-based access control, and protected routes\n- Used SQLC to generate type-safe Postgres queries and prevent injection vulnerabilities\n- Enforced encryption-in-transit and fine-grained permissions to meet enterprise security standards"
+	},
+	{
+		"name": "High-Performance Limit Order Book Engine",
+		"description": "Technology Used: C++.\n- Built a thread-safe limit order book using mutexes with support for 5 order types and full order lifecycle\n- Engineered a low-latency matching engine using std::map and std::deque with price-time priority\n- Optimized trade execution pipeline with O(log n) lookups and real-time order book tracking"
+	},
+	{
+		"name": "PatchBotAI",
+		"description": "Technology Used: Python, Gemini API, Pydantic, Subprocess.\n- Built an agentic AI system to automate multi-step debugging workflows, reducing dev time by 60%\n- Engineered a secure sandbox for file I/O with function orchestration and 100% filesystem isolation\n- Delivered a Claude Code–like UX with Gemini planning and multi-file bug resolution in one session"
+	}
 ]
+
