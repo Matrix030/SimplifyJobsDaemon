@@ -134,7 +134,55 @@ def find_project_blocks(doc, start_idx: int, end_idx: int, known_projects: list[
 
 
 def keep_only_projects(doc, projects_to_keep: list[str], known_projects: list[dict]) -> bool:
-    pass
+    #Remove all projects except the specified ones
+    # Find PROJECTS section boundaries
+    section_start, section_end = find_projects_section(doc)
+
+    if section_start is None or section_end is None:
+        print("Error: Could not find PROJECTS section")
+        return False
+    
+    print(f"Found PROJECTS section: elements {section_start} to {section_end}")
+
+    #Find all project blocks
+    project_blocks = find_project_blocks(doc, section_start, section_end, known_projects)
+    print(f"Found {len(project_blocks)} projects in document:")
+
+    for block in project_blocks:
+        print(f"  - {block['name']} (elements {block['start_idx']}-{block['end_idx']})")
+    
+    #Normalize names for matching
+    keeping_normalized = [p.lower().strip() for p in projects_to_keep]
+    
+    #Determine which indices to remove
+    indices_to_remove = set()
+
+    for block in project_blocks:
+        block_name_lower = block['name'].lower()
+
+        #Check if this project should be kept
+        should_keep = any(
+            keep_name in block_name_lower or block_name_lower in keep_name
+            for keep_name in keeping_normalized
+        )
+    
+        if should_keep:
+            print("Keeping: {block['name']}")
+        else:
+            print("Removing: {block['name']}")
+            for idx in range(block['start_idx'], block['end_idx']):
+                indices_to_remove.add(idx)
+
+    body = doc.text
+    nodes = list(body.childNodes)
+
+    for idx in sorted(indices_to_remove, reverse=True):
+        if idx < len(nodes):
+            body.removeChild(nodes[idx])
+    
+    print(f"Removed {len(indices_to_remove)} elements")
+    return True
+    
 
 def export_to_pdf(odt_path: Path, pdf_path: Path) -> bool:
     pass
