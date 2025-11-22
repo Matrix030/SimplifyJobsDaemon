@@ -62,10 +62,76 @@ def is_project_title(text: str, known_projects: list[dict]) -> tuple[bool, str |
 
 
 def find_projects_section(doc) -> tuple[int | None, int | None]:
-    pass
+    #find the start and end indices of the PROJECTS section
+    body = doc.text
+    nodes = list(body.childNodes)
+
+    start_idx = None
+    end_idx = None
+
+    for i, elem in enumerate(nodes):
+        text = get_text_content(elem).strip()
+
+        #Find PROJECTS header
+        if start_idx is None:
+            if 'PROJECTS' in text.upper() and len(text) < 30:
+                start_idx = i
+                continue
+        
+        #Find end of PROJECTS section
+        if start_idx is not None and i > start_idx:
+            if is_section_header(elem, text):
+                end_idx = i
+                break
+
+    #if no end found, assume it goes to the end
+    if start_idx is not None and end_idx is None:
+        end_idx = len(nodes)
+
+    return start_idx, end_idx
+
 
 def find_project_blocks(doc, start_idx: int, end_idx: int, known_projects: list[dict]) -> list[dict]:
-    pass
+    #Find all project blocks within the PROJECTS section
+    body = doc.text
+    nodes = list(body.childNodes)
+
+    projects = []
+    current_project = None
+    current_start = None
+
+    for i in range(start_idx + 1, end_idx):
+        elem = nodes[i]
+        tag =get_element_tag(elem)
+        text = get_text_content(elem).strip()
+
+        #Check if this is a project title paragraph
+        if tag == 'p':
+            is_title, proj_name = is_project_title(text, known_projects)
+
+            if is_title:
+                #Save previous project block
+                if current_project is not None:
+                    projects.append({
+                                    'name': current_project,
+                                    'start_idx': current_start,
+                                    'end_idx': i
+                                    })
+
+                # Start new project block
+                current_project = proj_name
+                current_start = i
+
+    #Don't forget the last project
+    if current_project is not None:
+        projects.append({
+                        'name': current_project,
+                        'start_idx': current_start,
+                        'end_idx': end_idx
+        })
+    
+    return projects
+
 
 def keep_only_projects(doc, projects_to_keep: list[str], known_projects: list[dict]) -> bool:
     pass
