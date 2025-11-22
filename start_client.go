@@ -5,15 +5,17 @@ import (
 	"time"
 
 	"github.com/Matrix030/SimplifyJobsDaemon/internal/ai"
+	"github.com/Matrix030/SimplifyJobsDaemon/internal/resume"
 	"github.com/Matrix030/SimplifyJobsDaemon/internal/scraper"
 	api "github.com/Matrix030/SimplifyJobsDaemon/internal/simplifyapi"
 	utils "github.com/Matrix030/SimplifyJobsDaemon/internal/simplifyutils"
 )
 
 type config struct {
-	jobClient api.Client
-	llmClient *ai.LLMClient
-	projects  []ai.Project
+	jobClient    api.Client
+	llmClient    *ai.LLMClient
+	projects     []ai.Project
+	resumeEditor *resume.Editor
 }
 
 func startClient(cfg *config) {
@@ -112,24 +114,39 @@ func startClient(cfg *config) {
 	}
 }
 
-func analyzeJobsWithLLM(cfg *config, descriptions []scraper.JobDescription) {
+func analyzeAndGenerateResume(cfg *config, descriptions []scraper.JobDescription) {
 	for _, desc := range descriptions {
 		if !desc.ScrapeSuccess {
 			fmt.Printf("Skipping %s - %s (scrape failed)\n", desc.CompanyName, desc.Title)
 			continue
 		}
 
-		fmt.Printf("\nAnalyzing: %s - %s\n", desc.CompanyName, desc.Title)
+		fmt.Printf("\nProcessing: %s - %s\n", desc.CompanyName, desc.Title)
 
+		//Step 1: Analyze with LLM
 		analysis, err := cfg.llmClient.AnalyzeJob(desc.Description, cfg.projects)
 		if err != nil {
-			fmt.Printf("  Error: %v\n", err)
+			fmt.Printf("LLM analysis failed: %v\n", err)
 			continue
 		}
 
-		fmt.Printf(" Selected Projects: %v\n", analysis.SelectedProjects)
-		fmt.Printf(" Reasoning: %s\n", analysis.Reasoning)
+		fmt.Printf("Selected projects: %v\n", analysis.SelectedProjects)
+		fmt.Printf("Reasoning: %s\n", analysis.Reasoning)
 
+		//Step 2: Generate tailored resume
+		if cfg.resumeEditor != nil {
+			outputName := fmt.Sprintf("%s_%s.pdf",
+				resume.SanitizeFilename(desc.CompanyName),
+				resume.SanitizeFilename(desc.Title),
+			)
+			pdfPath, err := cfg.resumeEditor.TailorResume(analysis.SelectedProjects, outputName)
+			if err != nil {
+				fmt.Printf("Resume generation failed: %v\n", err)
+				continue
+			}
+
+			fmt.Printf("Generated resume: %s\n", pdfPath)
+		}
 	}
 }
 

@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	ai "github.com/Matrix030/SimplifyJobsDaemon/internal/ai"
+	"github.com/Matrix030/SimplifyJobsDaemon/internal/resume"
 	api "github.com/Matrix030/SimplifyJobsDaemon/internal/simplifyapi"
 	"os"
 	"os/signal"
@@ -32,6 +33,13 @@ func main() {
 		fmt.Printf("Loaded %d projects for LLM analysis\n", len(projects))
 	}
 
+	resumeEditor := resume.NewEditor(
+		"scripts/edit_resume.py",
+		"scripts/resume_tempate.odt",
+		"projects.json",
+		"tailored_resumes",
+	)
+
 	cfg := &config{
 		jobClient: simplifyClient,
 		llmClient: llmClient,
@@ -57,4 +65,3 @@ func main() {
 		fmt.Println("Job monitor stopped.")
 	}
 }
-
