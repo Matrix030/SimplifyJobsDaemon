@@ -5,6 +5,7 @@ import (
 	"time"
 
 	"github.com/Matrix030/SimplifyJobsDaemon/internal/ai"
+	"github.com/Matrix030/SimplifyJobsDaemon/internal/resume"
 )
 
 func main() {
@@ -40,4 +41,22 @@ func main() {
 
 	fmt.Printf("\nSelected Projects: %v\n", result.SelectedProjects)
 	fmt.Printf("Reasoning: %s\n", result.Reasoning)
+
+	//Create resume editor
+	fmt.Println("\n--- Testing Resume Generation ---")
+	editor := resume.NewEditor(
+		"../../scripts/edit_resume.py",
+		"../../scripts/resume_template.odt",
+		"../../projects.json",
+		"../../tailored_resumes",
+	)
+
+	//Generate tailored resume
+	outputPath, err := editor.TailorResume(result.SelectedProjects, "test_output.pdf")
+	if err != nil {
+		fmt.Printf("Error generating resume: %v\n", err)
+		return
+	}
+
+	fmt.Printf("\nSuccess! Generated resume at: %s\n", outputPath)
 }

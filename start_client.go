@@ -88,10 +88,10 @@ func startClient(cfg *config) {
 				fmt.Printf("Error saving descriptions: %v\n", err)
 			}
 
-			//Analyze with LLM if available
+			//Analyze with LLM and generate resumes if available
 			if cfg.llmClient != nil && len(cfg.projects) > 0 {
-				fmt.Println("\n--- Analyzing jobs with LLM ---")
-				analyzeJobsWithLLM(cfg, descriptions)
+				fmt.Println("\n--- Analyzing jobs with LLM and generating resumes ---")
+				analyzeAndGenerateResume(cfg, descriptions)
 			}
 
 			//Send notification

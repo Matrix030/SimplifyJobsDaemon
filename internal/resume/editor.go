@@ -18,12 +18,19 @@ type Editor struct {
 }
 
 func NewEditor(scriptPath, templatePath, projectsJSON, outputDir string) *Editor {
-	//Try to find python in venv first
-	venvPython := filepath.Join(filepath.Dir(scriptPath), "venv", "bin", "python")
+	//Try to find python in venv first (.venv takes precedence)
+	scriptDir := filepath.Dir(scriptPath)
+	venvPython := filepath.Join(scriptDir, ".venv", "bin", "python")
 	pythonPath := "python3"
 
 	if _, err := os.Stat(venvPython); err == nil {
 		pythonPath = venvPython
+	} else {
+		// Fallback to venv without dot
+		venvPython = filepath.Join(scriptDir, "venv", "bin", "python")
+		if _, err := os.Stat(venvPython); err == nil {
+			pythonPath = venvPython
+		}
 	}
 
 
@@ -55,7 +62,7 @@ func (e *Editor) TailorResume(projects []string, outputName string) (string, err
 		"--template", e.templatePath,
 		"--projects-json", e.projectsJSON,
 		"--keep", projectsArgs,
-		"--output", outputPath
+		"--output", outputPath,
 	)
 
 	output, err := cmd.CombinedOutput()

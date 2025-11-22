@@ -168,9 +168,9 @@ def keep_only_projects(doc, projects_to_keep: list[str], known_projects: list[di
         )
     
         if should_keep:
-            print("Keeping: {block['name']}")
+            print(f"Keeping: {block['name']}")
         else:
-            print("Removing: {block['name']}")
+            print(f"Removing: {block['name']}")
             for idx in range(block['start_idx'], block['end_idx']):
                 indices_to_remove.add(idx)
 
@@ -191,7 +191,7 @@ def export_to_pdf(odt_path: Path, pdf_path: Path) -> bool:
         cmd = [
             'libreoffice',
             '--headless',
-            '--covert-to', 'pdf',
+            '--convert-to', 'pdf',
             '--outdir', str(pdf_path.parent),
             str(odt_path)
         ]

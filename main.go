@@ -35,15 +35,16 @@ func main() {
 
 	resumeEditor := resume.NewEditor(
 		"scripts/edit_resume.py",
-		"scripts/resume_tempate.odt",
+		"scripts/resume_template.odt",
 		"projects.json",
 		"tailored_resumes",
 	)
 
 	cfg := &config{
-		jobClient: simplifyClient,
-		llmClient: llmClient,
-		projects:  projects,
+		jobClient:    simplifyClient,
+		llmClient:    llmClient,
+		projects:     projects,
+		resumeEditor: resumeEditor,
 	}
 
 	//Signal Handling
