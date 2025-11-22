@@ -1,5 +1,6 @@
 import argparse
 import json
+from re import sub
 import subprocess
 import sys
 from pathlib import Path
@@ -185,7 +186,40 @@ def keep_only_projects(doc, projects_to_keep: list[str], known_projects: list[di
     
 
 def export_to_pdf(odt_path: Path, pdf_path: Path) -> bool:
-    pass
+    #Convert ODT to PDF using LibreOffice CLI
+    try:
+        cmd = [
+            'libreoffice',
+            '--headless',
+            '--covert-to', 'pdf',
+            '--outdir', str(pdf_path.parent),
+            str(odt_path)
+        ]
+
+        print(f"Running: {' '.join(cmd)}")
+        result = subprocess.run(cmd, capture_output=True, text=True, timeout=120)
+
+        if result.returncode != 0:
+            print(f"LibreOffice error: {result.stderr}")
+            return False
+
+        # LibreOffice outptus to same name with .pdf extension
+        generate_pdf = odt_path.with_suffix('.pdf')
+
+        #Move to desired location
+        if generate_pdf.resolve() != pdf_path.resolve():
+            if generate_pdf.exists():
+                generate_pdf.rename(pdf_path)
+
+        return pdf_path.exists()
+    
+    except subprocess.TimeoutExpired:
+        print("Error: LibreOffice conversion timed out")
+        return False
+    except FileNotFoundError:
+        print("Error: LibreOffice not found")
+        return False
+    
 
 def main():
     parser = argparse.ArgumentParser(
