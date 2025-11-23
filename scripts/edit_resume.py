@@ -1,12 +1,9 @@
 import argparse
 import json
-from re import sub
 import subprocess
 import sys
 from pathlib import Path
-from xml.sax import parse
 from odf.opendocument import load
-from odf import text as odf_text
 
 def load_known_projects(json_path: str) -> list[dict]:
     #Load project definitions from projects.json
