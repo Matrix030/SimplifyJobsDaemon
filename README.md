@@ -9,7 +9,7 @@ TODOs:
 - [X] Divide Internships and Full Time Opps
 - [ ] ?Simple Commands
 - [X] Cache
-- [ ] ?Local GPT-OSS review and Parsing the URL I get from the JSON
+- [X] Local GPT-OSS review and Parsing the URL I get from the JSON
 - [ ] ?BYOK GPT for editing process in the resume
 - [X] swaync for direct desktop notifications
 - [X] exec-once in hyprland.conf
