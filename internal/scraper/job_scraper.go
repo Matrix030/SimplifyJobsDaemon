@@ -2,7 +2,6 @@ package scraper
 
 import (
 	"fmt"
-	"log"
 	"net/http"
 	"strings"
 	"time"
