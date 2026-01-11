@@ -18,7 +18,7 @@ func main() {
 	fmt.Println()
 
 	//Create HTTP client
-	simplifyClient := api.NewClient(5 * time.Minute)
+	simplifyClient := api.NewClient(10 * time.Minute)
 
 	//Create LLM client
 	llmClient := ai.NewLLMClient("http://localhost:5000", 2*time.Minute)
